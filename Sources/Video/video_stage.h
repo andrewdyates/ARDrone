@@ -3,6 +3,7 @@
 
 #include <config.h>
 #include <VP_Api/vp_api_thread_helper.h>
+#include "UI/gui.h"
 
 
 PROTO_THREAD_ROUTINE(video_stage, data);
