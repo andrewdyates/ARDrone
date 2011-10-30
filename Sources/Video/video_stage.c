@@ -67,30 +67,30 @@ C_RESULT output_gtk_stage_transform( void *cfg, vp_api_io_data_t *in, vp_api_io_
   pixbuf_data      = (uint8_t*)in->buffers[0];
   vp_os_mutex_unlock(&video_update_lock);
 
-  /* gdk_threads_enter(); */
-  /* // GdkPixbuf structure to store the displayed picture */
-  /* static GdkPixbuf *pixbuf = NULL; */
+  gdk_threads_enter();
+  // GdkPixbuf structure to store the displayed picture
+  static GdkPixbuf *pixbuf = NULL;
 
-  /* if (pixbuf != NULL) { */
-  /*   g_object_unref(pixbuf); */
-  /*   pixbuf=NULL; */
-  /* } */
+  if (pixbuf != NULL) {
+    g_object_unref(pixbuf);
+    pixbuf=NULL;
+  }
 
-  /* // Creating the GdkPixbuf from the transmitted data */
-  /* pixbuf = gdk_pixbuf_new_from_data(pixbuf_data, */
-  /* 				    GDK_COLORSPACE_RGB, */
-  /* 				    FALSE,    // No alpha channel */
-  /* 				    8,        // 8 bits per pixel */
-  /* 				    320,      // Image width */
-  /* 				    288,      // Image height */
-  /* 				    320 * 3,  // new pixel every 3 bytes (3channel per pixel) */
-  /* 				    NULL,     // Function pointers */
-  /* 				    NULL); */
+  // Creating the GdkPixbuf from the transmitted data
+  pixbuf = gdk_pixbuf_new_from_data(pixbuf_data,
+  				    GDK_COLORSPACE_RGB,
+  				    FALSE,    // No alpha channel
+  				    8,        // 8 bits per pixel
+  				    320,      // Image width
+  				    288,      // Image height
+  				    320 * 3,  // new pixel every 3 bytes (3channel per pixel)
+  				    NULL,     // Function pointers
+  				    NULL);
 
-  /* gui_t *gui = get_gui(); */
-  /* if (gui && gui->cam) // Displaying the image */
-  /*   gtk_image_set_from_pixbuf(GTK_IMAGE(gui->cam), pixbuf); */
-  /* gdk_threads_leave(); */
+  gui_t *gui = get_gui();
+  if (gui && gui->cam) // Displaying the image
+    gtk_image_set_from_pixbuf(GTK_IMAGE(gui->cam), pixbuf);
+  gdk_threads_leave();
   
   return (SUCCESS);
 }
