@@ -67,6 +67,19 @@ C_RESULT output_gtk_stage_transform( void *cfg, vp_api_io_data_t *in, vp_api_io_
   pixbuf_data      = (uint8_t*)in->buffers[0];
   vp_os_mutex_unlock(&video_update_lock);
 
+  // try to do something with pixbuf_data
+  int x, y, z, size_buff, size_type;
+  size_buff = sizeof(pixbuf_data);
+  size_type = sizeof(typeof(pixbuf_data));
+  x = pixbuf_data[0];
+  y = pixbuf_data[1];
+  z = pixbuf_data[2];
+  //  x2 = pixbuf_data[320*240*3 -1]
+
+  printf("Smee! Do something intelligent!: %d %d %d\n", x, y, z);
+  printf("buffer: %d elements of size %d\n", size_buff, size_type);
+  printf("\033[2J");
+
   gdk_threads_enter();
   // GdkPixbuf structure to store the displayed picture
   static GdkPixbuf *pixbuf = NULL;
@@ -82,12 +95,13 @@ C_RESULT output_gtk_stage_transform( void *cfg, vp_api_io_data_t *in, vp_api_io_
   				    FALSE,    // No alpha channel
   				    8,        // 8 bits per pixel
   				    320,      // Image width
-  				    288,      // Image height
+				    240,
+  				    //288,      // Image height
   				    320 * 3,  // new pixel every 3 bytes (3channel per pixel)
   				    NULL,     // Function pointers
   				    NULL);
-
   gui_t *gui = get_gui();
+
   if (gui && gui->cam) // Displaying the image
     gtk_image_set_from_pixbuf(GTK_IMAGE(gui->cam), pixbuf);
   gdk_threads_leave();
