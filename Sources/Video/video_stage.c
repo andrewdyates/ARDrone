@@ -50,6 +50,8 @@
 #include <ardrone_tool/UI/ardrone_input.h>
 #include <stdio.h>
 
+#include <cv.h>
+
 #define NB_STAGES 10
 
 PIPELINE_HANDLE pipeline_handle;
@@ -84,6 +86,26 @@ C_RESULT output_gtk_stage_transform( void *cfg, vp_api_io_data_t *in, vp_api_io_
     fprintf(fp, "%c", pixbuf_data[i]);
   }
   fclose(fp);
+
+  // BEGIN MICHAEL'S + DANIYA'S SUPER HACKY OPENCV CODE
+  // ===================================================
+  IplImage *cvTempIm = cvCreateImage(cvSize(320,240),IPL_DEPTH_8U,3);
+  IplImage *cvFrameIm = cvCreateImage(cvSize(320,240),IPL_DEPTH_8U,3);
+
+  cvTempIm->imageData = pixbuf_data;
+  cvCvtColor(cvTempIm, cvFrameIm, CV_BGR2RGB);
+  cvReleaseImage(&cvTempIm);
+  //IplImage *redIm, *greenIm, *blueIm;
+  IplImage *redIm = cvCreateImage(cvSize(320,240),IPL_DEPTH_8U,1);
+  IplImage *greenIm = cvCreateImage(cvSize(320,240),IPL_DEPTH_8U,1);
+  IplImage *blueIm = cvCreateImage(cvSize(320,240),IPL_DEPTH_8U,1);
+  cvSplit(cvFrameIm,redIm,greenIm,blueIm,0);
+  cvZero(redIm);
+  cvZero(blueIm);
+  cvMerge(redIm,greenIm,blueIm,0,cvFrameIm);
+  cvThreshold(cvFrameIm, cvTempIm, 40, 255, CV_THRESH_BINARY);
+  // ===================================================
+  // END MICHAEL'S CODE
 
   gdk_threads_enter();
   // GdkPixbuf structure to store the displayed picture
