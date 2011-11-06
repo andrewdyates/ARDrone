@@ -48,6 +48,7 @@
 #include "../UI/gui.h"
 
 #include <ardrone_tool/UI/ardrone_input.h>
+#include <stdio.h>
 
 #define NB_STAGES 10
 
@@ -63,52 +64,26 @@ C_RESULT output_gtk_stage_open( void *cfg, vp_api_io_data_t *in, vp_api_io_data_
 
 C_RESULT output_gtk_stage_transform( void *cfg, vp_api_io_data_t *in, vp_api_io_data_t *out)
 {
-  
-  static int state = 0;
+  static int frame = 0;
+  char filename[50];
+  int i;
+
+  frame++;
   
   vp_os_mutex_lock(&video_update_lock);
   /* Get a reference to the last decoded picture */
   pixbuf_data      = (uint8_t*)in->buffers[0];
   vp_os_mutex_unlock(&video_update_lock);
 
-
-
-  // try to do something with pixbuf_data
-  int x, y, z, size_buff, size_type;
-  int x2, y2, z2, x3, y3, z3;
-  size_buff = sizeof(pixbuf_data);
-  size_type = sizeof(typeof(pixbuf_data));
-  x = pixbuf_data[0];
-  y = pixbuf_data[1];
-  z = pixbuf_data[2];
-  // last pixel of first row?
-  x2 = pixbuf_data[319*3];
-  y2 = pixbuf_data[319*3+1];
-  z2 = pixbuf_data[319*3+2];
-  // last pixel, last row?
-  x3 = pixbuf_data[319*3*240];
-  y3 = pixbuf_data[319*3*240+1];
-  z3 = pixbuf_data[319*3*240+2];
-
-  int i, sum, avg;
-  sum = 0;
-  for (i=0; i<320*3*240; i++) {
-    sum += pixbuf_data[i];
+  // write pixbuf to file
+  sprintf(filename, "/home/a/pixbuf/pixbuf_%d.ppm", frame);
+  FILE *fp = fopen(filename, "w");
+  // write header
+  fprintf(fp, "P6\n320 240\n255\n");
+  for (i=0; i<320*240*3; i++) {
+    fprintf(fp, "%c", pixbuf_data[i]);
   }
-  avg = sum / (320*3*240);
-  
-  // stupid simple flight control
-  if (avg <= 55 && state == 0) {
-    printf("Taking off!\n");
-    ardrone_tool_set_ui_pad_start(1);
-    state = 1;
-  } 
-
-  printf("Smee! Do something intelligent! Top left: %d %d %d\n", x, y, z);
-  printf("Top right?: %d %d %d \n", x2, y2, z2);
-  printf("Bottom right?: %d %d %d\n", x3, y3, z3);
-  printf("Average value?: %d\n", avg);
-  printf("\033[2J");
+  fclose(fp);
 
   gdk_threads_enter();
   // GdkPixbuf structure to store the displayed picture
