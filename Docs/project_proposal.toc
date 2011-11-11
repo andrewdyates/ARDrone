@@ -1,0 +1,9 @@
+\contentsline {section}{Proposal}{3}
+\contentsline {section}{Outline}{3}
+\contentsline {section}{Test Flight: Stationary Follow}{4}
+\contentsline {subsection}{Subgoal}{4}
+\contentsline {section}{Base Flight: Dynamic Follow}{4}
+\contentsline {section}{Subprojects}{4}
+\contentsline {subsection}{Michael}{4}
+\contentsline {subsection}{Daniya}{5}
+\contentsline {section}{Goal Flight: Recognized Face Follow}{5}
