@@ -13,4 +13,4 @@ for i=0:size(pixbuf_rows2,1)-1
     col = mod(i, 320) + 1;
     A(row,col,:) = pixbuf_rows2(i+1,:);
 end
-imshow(uint8(A))
+imagesc(uint8(A))
