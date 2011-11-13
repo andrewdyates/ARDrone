@@ -46,10 +46,24 @@ for i = 1:N
     Mask = medfilt2(Mask);
     Mask = bwmorph(bwmorph(Mask, 'dilate'), 'dilate');
     Mask = bwmorph(bwmorph(Mask, 'erode'), 'erode');
+    % get largest connected component (assume this doesn't need to be done)
+    % compute center of mass
+    m10 = mymoment(Mask,1,0);
+    m01 = mymoment(Mask,0,1);
+    m00 = mymoment(Mask,0,0);
+    if m00 > 0
+        x = m10/m00;
+        y = m01/m00;
+    else
+        x = NaN; y = NaN;
+    end
     subplot(1,2,1);
     imshow(Mask);
     subplot(1,2,2);
     imshow(uint8(img));
+    hold on
+    plot(x, y, 'g*');
+    hold off
     pause;
 end
 
