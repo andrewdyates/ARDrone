@@ -26,7 +26,7 @@ for i = 1:N
            val = HSVImg(row,col,3);
            % highlights
            if val >= .99 && (hue < 30/360 || hue > 355/360) ...
-               && sat > .2
+               && sat > .1
                Mask(row,col) =1;
            end
            if (hue > 5/360 && hue < 15/360) && sat > .55
@@ -42,6 +42,10 @@ for i = 1:N
            end
         end
     end
+    % clean mask
+    Mask = medfilt2(Mask);
+    Mask = bwmorph(bwmorph(Mask, 'dilate'), 'dilate');
+    Mask = bwmorph(bwmorph(Mask, 'erode'), 'erode');
     subplot(1,2,1);
     imshow(Mask);
     subplot(1,2,2);
