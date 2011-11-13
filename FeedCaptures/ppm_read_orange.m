@@ -29,7 +29,8 @@ for i = 1:N
                && sat > .1
                Mask(row,col) =1;
            end
-           if (hue > 5/360 && hue < 15/360) && sat > .55
+           % mid values
+           if val >= .2 && (hue > 5/360 && hue < 15/360) && sat > .55
                Mask(row,col) =1;
            end
            if (hue < 25/360 || hue > 358/360) && sat > .6
@@ -44,9 +45,10 @@ for i = 1:N
     end
     % clean mask
     Mask = medfilt2(Mask);
-    Mask = bwmorph(bwmorph(Mask, 'dilate'), 'dilate');
-    Mask = bwmorph(bwmorph(Mask, 'erode'), 'erode');
-    % get largest connected component (assume this doesn't need to be done)
+    Mask = bwmorph(bwmorph(bwmorph(Mask, 'dilate'), 'dilate'), 'dilate');
+    Mask = bwmorph(bwmorph(bwmorph(Mask, 'erode'), 'erode'), 'erode');
+    % get largest connected component 
+    % DO THIS IN C TO REMOVE OUTLIERS!
     % compute center of mass
     m10 = mymoment(Mask,1,0);
     m01 = mymoment(Mask,0,1);

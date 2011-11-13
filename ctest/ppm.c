@@ -71,25 +71,24 @@ int write_ppm(unsigned char* buf, char* filename) {
 }
 
 
-unsigned char ind3(unsigned char* buf, int x, int y, char a) {
-  /* Index 3 channel byte buffer: Return byte at x, y, a in byte buffer.
+unsigned int ind3(int x, int y, char a) {
+  /* Index 3 channel byte buffer: Return index for pixel at (x,y,a)
      Access Out-of-Bounds indices at nearest boundary index.
 
   Args:
     x: 0 to WIDTH-1 x coordinate of pixel
     y: 0 to HEIGHT-1 y coordinate of pixel
-    a: 0, 1, or 2: typically rgb or hsv respectively
+    a: offset 0 to 2 (rgb or hsv)
   Returns:
-    byte of pixel value at (x,y,c)
+    index value of (x,y,a)
   */
-  int i;
+  unsigned int i;
   if (x < 0) x = 0;
   if (x > WIDTH-1) x = WIDTH-1;
   if (y < 0) y = 0;
   if (y > HEIGHT-1) x = HEIGHT-1;
   if (a < 0) a = 0;
   if (a > 2) a = 2;
-
   i = y*WIDTH*3 + x*3 + a;
-  return buf[i];
+  return i;
 }

@@ -11,10 +11,10 @@ int main() {
   read_ppm(buf, filename_in);
   write_ppm(buf, filename_out);
   // verify index function works as expected
-  c1 = ind3(buf, 0, 0, 0);
-  c2 = ind3(buf, 1, 0, 0);
-  c3 = ind3(buf, 1, 1, 2);
-  // should be 102, 102, 79
+  c1 = buf[ind3(0, 0, 0)];
+  c2 = buf[ind3(1, 0, 0)];
+  c3 = buf[ind3(1, 1, 2)];
+  printf("should be 102, 102, 79\n");
   printf("%d %d %d\n", c1, c2, c3);
   return 0;
 }
