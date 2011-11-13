@@ -14,3 +14,4 @@ for i=0:size(pixbuf_rows2,1)-1
     A(row,col,:) = pixbuf_rows2(i+1,:);
 end
 imagesc(uint8(A))
+
