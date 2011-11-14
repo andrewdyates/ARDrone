@@ -18,8 +18,8 @@ void rgb2hsv(char* rgb_buf, float* hsv_buf) {
   unsigned char max, min;
   float chroma, hue, saturation, value;
 
-  for (x=0; x<WIDTH-1; x++) {
-    for (y=0; y<HEIGHT-1; y++) {
+  for (x=0; x<WIDTH; x++) {
+    for (y=0; y<HEIGHT; y++) {
       r = rgb_buf[ind3(x, y, 0)];
       g = rgb_buf[ind3(x, y, 1)];
       b = rgb_buf[ind3(x, y, 2)];

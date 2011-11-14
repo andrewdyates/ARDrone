@@ -54,7 +54,7 @@ int write_ppm(unsigned char* buf, char* filename) {
   FILE *fp;
   int i;
 
-  fp = fopen("test.ppm", "w");
+  fp = fopen(filename, "w");
   if (fp == NULL) {
     fprintf(stderr, "WARNING: Cannot open file '%s' for write.", filename);
     return -1;
@@ -86,7 +86,7 @@ unsigned int ind3(int x, int y, char a) {
   if (x < 0) x = 0;
   if (x > WIDTH-1) x = WIDTH-1;
   if (y < 0) y = 0;
-  if (y > HEIGHT-1) x = HEIGHT-1;
+  if (y > HEIGHT-1) y = HEIGHT-1;
   if (a < 0) a = 0;
   if (a > 2) a = 2;
   i = y*WIDTH*3 + x*3 + a;
