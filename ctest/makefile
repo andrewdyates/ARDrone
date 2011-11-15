@@ -1,11 +1,13 @@
 TESTS=test_gauss test_hsv test_ppm
+GAUSS=gauss.o ppm.o
+HSV=hsv.o util.o
 
 all: $(TESTS)
 
-test_gauss: gauss.o gauss_test.o ppm.o
-	gcc -o test_gauss  gauss.o gauss_test.o ppm.o
-test_hsv: util.o ppm.o hsv.o hsv_test.o
-	gcc -o test_hsv util.o ppm.o hsv.o hsv_test.o
+test_gauss: gauss_test.o $(GAUSS)
+	gcc -o test_gauss gauss_test.o $(GAUSS)
+test_hsv: ppm.o hsv_test.o $(HSV)
+	gcc -o test_hsv ppm.o hsv_test.o $(HSV)
 test_ppm: ppm.o ppm_test.o
 	gcc -o test_ppm ppm.o ppm_test.o
 
