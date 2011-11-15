@@ -1,9 +1,11 @@
-TESTS=test_gauss test_hsv test_ppm
+TESTS=test_gauss test_hsv test_ppm test_mask
 GAUSS=gauss.o ppm.o
 HSV=hsv.o util.o
 
 all: $(TESTS)
 
+test_mask: mask_test.o threshold.o ppm.o $(HSV)
+	gcc -o test_mask mask_test.o threshold.o ppm.o $(HSV)
 test_gauss: gauss_test.o $(GAUSS)
 	gcc -o test_gauss gauss_test.o $(GAUSS)
 test_hsv: ppm.o hsv_test.o $(HSV)
@@ -20,8 +22,10 @@ ppm.o: ppm.c
 util.o: util.c
 	gcc -c util.c
 threshold.o: threshold.c
-	gcc -c util.c
+	gcc -c threshold.c
 
+mask_test.o: mask_test.c
+	gcc -c mask_test.c
 gauss_test.o: gauss_test.c
 	gcc -c gauss_test.c
 hsv_test.o: hsv_test.c

@@ -120,7 +120,7 @@ int write_ppm1(unsigned char* buf, char* filename) {
        -1: I/O error
    */
   FILE *fp;
-  int i;
+  int x, y;
 
   fp = fopen(filename, "w");
   if (fp == NULL) {
@@ -131,8 +131,11 @@ int write_ppm1(unsigned char* buf, char* filename) {
   // write header
   fprintf(fp, "P1\n320 240\n");
   // write bytes
-  for (i=0; i<WIDTH*HEIGHT; i++) {
-    fprintf(fp, "%d", buf[i]);
+  for (y=0; y<HEIGHT; y++) {
+    for (x=0; x<WIDTH-1; x++) {
+      fprintf(fp, "%d ", buf[ind1(x,y)]);
+    }
+    fprintf(fp, "%d\n ", buf[ind1(x+1,y)]);
   }
   fclose(fp);
   return 0;

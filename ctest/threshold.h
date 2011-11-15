@@ -1,1 +1,1 @@
-void orange_thresh(unsigned char* buf, unsigned char* mask);
+void orange_thresh(float* buf, unsigned char* mask);

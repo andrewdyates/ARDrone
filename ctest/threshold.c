@@ -1,4 +1,5 @@
 #include "ppm.h"
+#include "threshold.h"
 
 void orange_thresh(float* fbuf, unsigned char* mask) {
   /* Find orange ball mask from HSV float image buffer. */
