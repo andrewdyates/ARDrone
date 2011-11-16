@@ -3,24 +3,24 @@ TESTS=test_gauss test_hsv test_ppm test_mask test_util test_filter full
 all: $(TESTS)
 
 full: full_frame_test.o threshold.o ppm.o hsv.o util.o gauss.o moments.o binfilter.o
-	gcc -o full full_frame_test.o threshold.o ppm.o hsv.o util.o gauss.o moments.o binfilter.o
+	gcc -lm -o full full_frame_test.o threshold.o ppm.o hsv.o util.o gauss.o moments.o binfilter.o
 test_filter: filter_test.o ppm.o binfilter.o
-	gcc -o test_filter filter_test.o ppm.o binfilter.o
+	gcc -lm -o test_filter filter_test.o ppm.o binfilter.o
 test_mask: mask_test.o threshold.o ppm.o hsv.o util.o gauss.o moments.o 
-	gcc -o test_mask mask_test.o threshold.o ppm.o hsv.o util.o gauss.o moments.o 
+	gcc -lm -o test_mask mask_test.o threshold.o ppm.o hsv.o util.o gauss.o moments.o 
 test_gauss: gauss_test.o gauss.o ppm.o
-	gcc -o test_gauss gauss_test.o gauss.o ppm.o
+	gcc -lm -o test_gauss gauss_test.o gauss.o ppm.o
 test_hsv: ppm.o hsv_test.o hsv.o util.o
-	gcc -o test_hsv ppm.o hsv_test.o hsv.o util.o
+	gcc -lm -o test_hsv ppm.o hsv_test.o hsv.o util.o
 test_ppm: ppm.o ppm_test.o
-	gcc -o test_ppm ppm.o ppm_test.o
+	gcc -lm -o test_ppm ppm.o ppm_test.o
 test_util: util.o util_test.o
-	gcc -o test_util util.o util_test.o
+	gcc -lm -o test_util util.o util_test.o
 
 moments.o: moments.c
 	gcc -c -O3 moments.c
 gauss.o: gauss.c
-	gcc -c -O3 gauss.c
+	gcc -c -O3 -lm gauss.c
 hsv.o: hsv.c
 	gcc -c -O3 hsv.c
 ppm.o: ppm.c

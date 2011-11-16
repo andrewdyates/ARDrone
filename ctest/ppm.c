@@ -17,6 +17,7 @@ int read_ppm(unsigned char* buf, char* filename) {
   unsigned char c;
   int num_bytes = 80;
   char header[num_bytes];
+  char *r;
 
   // open filename
   fp = fopen(filename, "r");
@@ -25,9 +26,9 @@ int read_ppm(unsigned char* buf, char* filename) {
     return -1;
   }
   // ignore first three lines
-  fgets(header, num_bytes, fp);
-  fgets(header, num_bytes, fp);
-  fgets(header, num_bytes, fp);
+  r = fgets(header, num_bytes, fp);
+  r = fgets(header, num_bytes, fp);
+  r = fgets(header, num_bytes, fp);
   // read bytes
   for (i=0; i<WIDTH*HEIGHT*3; i++) {
     c = fgetc(fp);
@@ -158,6 +159,7 @@ int read_ppm1(unsigned char* buf, char* filename) {
   unsigned char c;
   int num_bytes = 80;
   char header[num_bytes];
+  char *r;
 
   // open filename
   fp = fopen(filename, "r");
@@ -166,8 +168,8 @@ int read_ppm1(unsigned char* buf, char* filename) {
     return -1;
   }
   // ignore first two lines
-  fgets(header, num_bytes, fp);
-  fgets(header, num_bytes, fp);
+  r = fgets(header, num_bytes, fp);
+  r = fgets(header, num_bytes, fp);
   // read bytes
   for (i=0; i<WIDTH*HEIGHT; i++) {
     c = fgetc(fp);
