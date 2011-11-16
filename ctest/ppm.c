@@ -131,11 +131,12 @@ int write_ppm1(unsigned char* buf, char* filename) {
   // write header
   fprintf(fp, "P1\n320 240\n");
   // write bytes
+  int a;
   for (y=0; y<HEIGHT; y++) {
     for (x=0; x<WIDTH-1; x++) {
       fprintf(fp, "%d ", buf[ind1(x,y)]);
     }
-    fprintf(fp, "%d\n ", buf[ind1(x+1,y)]);
+    fprintf(fp, "%d\n", buf[ind1(x+1,y)]);
   }
   fclose(fp);
   return 0;
@@ -170,6 +171,7 @@ int read_ppm1(unsigned char* buf, char* filename) {
   // read bytes
   for (i=0; i<WIDTH*HEIGHT; i++) {
     c = fgetc(fp);
+    fgetc(fp); // consume whitespace
     if (!feof(fp) && !ferror(fp)) {
       buf[i] = c - '0';
     } else {
