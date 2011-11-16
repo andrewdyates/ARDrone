@@ -4,19 +4,20 @@
 void median_filter(unsigned char* buf) {
   /* Apply 3x3 median filter to WIDTH*HEIGHT binary image mask buf */
   int x, y, i;
-  int ones;
+  int ones, last_ones;
   int xx, offset;
   unsigned char rowbuf[WIDTH*2];
   
-  for (x=0; x<WIDTH; x++) {
-    for (y=0; y<HEIGHT; y++) {
-      offset = WIDTH*(y%2);
-      // write row from two iterations ago
-      if (y>=2) {
-	for (xx=0; x<WIDTH; x++) {
-	  buf[ind1(xx,y-2)] = rowbuf[x+offset];
-	}
+  for (y=0; y<HEIGHT; y++) {
+    offset = WIDTH*(y%2);
+    last_ones = 5;
+    // write row from two iterations ago
+    if (y>=2) {
+      for (xx=0; xx<WIDTH; xx++) {
+	buf[ind1(xx,y-2)] = rowbuf[xx+offset];
       }
+    }
+    for (x=0; x<WIDTH; x++) {
       // compute median from sum of 0s and 1s
       ones =  buf[ind1(x-1,y-1)] + buf[ind1(x,y-1)] + buf[ind1(x+1,y-1)];
       ones += buf[ind1(x-1,y)] + buf[ind1(x,y)] + buf[ind1(x+1,y)];
@@ -30,14 +31,12 @@ void median_filter(unsigned char* buf) {
   }
   // write last two rows
   offset = WIDTH*(y%2);
-  for (xx=0; x<WIDTH; x++) {
-    buf[ind1(xx,y-2)] = rowbuf[x+offset];
+  for (xx=0; xx<WIDTH; xx++) {
+    buf[ind1(xx,y-2)] = rowbuf[xx+offset];
   }
   y++;
   offset = WIDTH*(y%2);
-  for (xx=0; x<WIDTH; x++) {
-    buf[ind1(xx,y-2)] = rowbuf[x+offset];
+  for (xx=0; xx<WIDTH; xx++) {
+    buf[ind1(xx,y-2)] = rowbuf[xx+offset];
   }
-      
-
 }

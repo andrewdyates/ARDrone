@@ -16,32 +16,32 @@ test_util: util.o util_test.o
 	gcc -o test_util util.o util_test.o
 
 moments.o: moments.c
-	gcc -c moments.c
+	gcc -c -O3 moments.c
 gauss.o: gauss.c
-	gcc -c gauss.c
+	gcc -c -O3 gauss.c
 hsv.o: hsv.c
-	gcc -c hsv.c
+	gcc -c -O3 hsv.c
 ppm.o: ppm.c
-	gcc -c ppm.c
+	gcc -c -O3 ppm.c
 util.o: util.c
-	gcc -c util.c
+	gcc -c -O3 util.c
 threshold.o: threshold.c
-	gcc -c threshold.c
+	gcc -c -O3 threshold.c
 binfilter.o: binfilter.c
-	gcc -c binfilter.c
+	gcc -c -O3 binfilter.c
 
 filter_test.o: filter_test.c
-	gcc -c filter_test.c
+	gcc -c -O3 filter_test.c
 mask_test.o: mask_test.c
-	gcc -c mask_test.c
+	gcc -c -O3 mask_test.c
 gauss_test.o: gauss_test.c
-	gcc -c gauss_test.c
+	gcc -c -O3 gauss_test.c
 hsv_test.o: hsv_test.c
-	gcc -c hsv_test.c
+	gcc -c -O3 hsv_test.c
 ppm_test.o: ppm_test.c
-	gcc -c ppm_test.c
+	gcc -c -O3 ppm_test.c
 util_test.o: util_test.c
-	gcc -c util_test.c
+	gcc -c -O3 util_test.c
 
 clean:
 	rm -f *.o $(TESTS)
