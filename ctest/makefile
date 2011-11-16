@@ -1,7 +1,9 @@
-TESTS=test_gauss test_hsv test_ppm test_mask test_util test_filter
+TESTS=test_gauss test_hsv test_ppm test_mask test_util test_filter full
 
 all: $(TESTS)
 
+full: full_frame_test.o threshold.o ppm.o hsv.o util.o gauss.o moments.o binfilter.o
+	gcc -o full full_frame_test.o threshold.o ppm.o hsv.o util.o gauss.o moments.o binfilter.o
 test_filter: filter_test.o ppm.o binfilter.o
 	gcc -o test_filter filter_test.o ppm.o binfilter.o
 test_mask: mask_test.o threshold.o ppm.o hsv.o util.o gauss.o moments.o 
@@ -30,6 +32,8 @@ threshold.o: threshold.c
 binfilter.o: binfilter.c
 	gcc -c -O3 binfilter.c
 
+full_frame_test.o: full_frame_test.c
+	gcc -c -O3 full_frame_test.c
 filter_test.o: filter_test.c
 	gcc -c -O3 filter_test.c
 mask_test.o: mask_test.c
