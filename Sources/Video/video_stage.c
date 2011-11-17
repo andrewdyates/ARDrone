@@ -52,6 +52,7 @@
 #include <stdio.h>
 
 #include "../project/frame.h"
+#include "../project/fly.h"
 
 #define NB_STAGES 10
 
@@ -71,6 +72,7 @@ C_RESULT output_gtk_stage_transform( void *cfg, vp_api_io_data_t *in, vp_api_io_
   int mass, x_center, y_center;
   unsigned char mask_buf[320*240];
   uint8_t display_data[320*240*3];
+  int is_hover;
 
   frame++;
   
@@ -83,6 +85,9 @@ C_RESULT output_gtk_stage_transform( void *cfg, vp_api_io_data_t *in, vp_api_io_
   process_frame(pixbuf_data, mask_buf, &mass, &x_center, &y_center);
   // Get mask display
   display_mask(mask_buf, display_data, x_center, y_center);
+  // Fly drone
+  
+  is_hover = fly(x_center, y_center, mass, 1);
 
   // Print status
   printf("Frame number: %d\n", frame);

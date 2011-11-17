@@ -7,7 +7,8 @@ CSE634_PROJECT=\
   project/util.c \
   project/threshold.c \
   project/binfilter.c \
-  project/frame.c
+  project/frame.c \
+  project/fly.c
 
 
 SDK_PATH:=$(shell pwd)/../../../../ARDroneLib
