@@ -57,7 +57,11 @@ void init_gui(int argc, char **argv)
             gui->box);
   gui->cam = gtk_image_new();
   gtk_box_pack_start(GTK_BOX(gui->box), gui->cam, FALSE, TRUE, 0);
- 
+  // add mask cam
+  gui->mask_cam = gtk_image_new();
+  gtk_box_pack_start(GTK_BOX(gui->box), gui->mask_cam, FALSE, TRUE, 0);
+  // end mask cam
+
   gui->start = gtk_button_new_with_label("Start");
   g_signal_connect (gui->start, "clicked",
               G_CALLBACK (buttons_callback), NULL);

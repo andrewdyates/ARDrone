@@ -1,3 +1,15 @@
+# Custom code 
+CSE634_PROJECT=\
+  project/moments.c \
+  project/gauss.c \
+  project/hsv.c \
+  project/ppm.c \
+  project/util.c \
+  project/threshold.c \
+  project/binfilter.c \
+  project/frame.c
+
+
 SDK_PATH:=$(shell pwd)/../../../../ARDroneLib
 PC_TARGET=yes
 USE_LINUX=yes
@@ -29,7 +41,8 @@ GENERIC_BINARIES_COMMON_SOURCE_FILES+=			\
    UI/gui.c  \
    UI/gamepad.c \
    Navdata/navdata.c    \
-   Video/video_stage.c
+   Video/video_stage.c \
+   $(CSE634_PROJECT)
 
 GENERIC_INCLUDES+=					\
 	$(SRC_DIR) \

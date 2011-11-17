@@ -5,7 +5,7 @@
 #include <stdio.h>
 
 
-void rgb2hsv(char* rgb_buf, float* hsv_buf) {
+void rgb2hsv(unsigned char* rgb_buf, float* hsv_buf) {
   /* Convert (red, green, blue) to (hue, saturation, value).
 
   Args:

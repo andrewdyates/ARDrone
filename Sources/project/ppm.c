@@ -132,7 +132,6 @@ int write_ppm1(unsigned char* buf, char* filename) {
   // write header
   fprintf(fp, "P1\n320 240\n");
   // write bytes
-  int a;
   for (y=0; y<HEIGHT; y++) {
     for (x=0; x<WIDTH-1; x++) {
       fprintf(fp, "%d ", buf[ind1(x,y)]);

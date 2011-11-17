@@ -3,7 +3,7 @@
 
 void median_filter(unsigned char* buf) {
   /* Apply 3x3 median filter to WIDTH*HEIGHT binary image mask buf */
-  int x, y, i;
+  int x, y;
   int ones, last_ones;
   int xx, offset;
   unsigned char rowbuf[WIDTH*2];
