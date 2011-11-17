@@ -1,6 +1,7 @@
 /*
  * @video_stage.c
  * @author marc-olivier.dzeukou@parrot.com
+ * @author modified by Andrew D. Yates
  * @date 2007/07/27
  *
  * ihm vision thread implementation
@@ -50,6 +51,9 @@
 #include <ardrone_tool/UI/ardrone_input.h>
 #include <stdio.h>
 
+#include "../project/frame.h"
+#include "../project/fly.h"
+
 #define NB_STAGES 10
 
 PIPELINE_HANDLE pipeline_handle;
@@ -65,8 +69,10 @@ C_RESULT output_gtk_stage_open( void *cfg, vp_api_io_data_t *in, vp_api_io_data_
 C_RESULT output_gtk_stage_transform( void *cfg, vp_api_io_data_t *in, vp_api_io_data_t *out)
 {
   static int frame = 0;
-  char filename[50];
-  int i;
+  int mass, x_center, y_center;
+  unsigned char mask_buf[320*240];
+  uint8_t display_data[320*240*3];
+  int is_hover;
 
   frame++;
   
@@ -75,40 +81,59 @@ C_RESULT output_gtk_stage_transform( void *cfg, vp_api_io_data_t *in, vp_api_io_
   pixbuf_data      = (uint8_t*)in->buffers[0];
   vp_os_mutex_unlock(&video_update_lock);
 
-  // write pixbuf to file
-  sprintf(filename, "/home/a/pixbuf/pixbuf_%d.ppm", frame);
-  FILE *fp = fopen(filename, "w");
-  // write header
-  fprintf(fp, "P6\n320 240\n255\n");
-  for (i=0; i<320*240*3; i++) {
-    fprintf(fp, "%c", pixbuf_data[i]);
-  }
-  fclose(fp);
+  // Process last frame
+  process_frame(pixbuf_data, mask_buf, &mass, &x_center, &y_center);
+  // Get mask display
+  display_mask(mask_buf, display_data, x_center, y_center);
+  // Fly drone
+  
+  is_hover = fly(x_center, y_center, mass, 1);
+
+  // Print status
+  printf("Frame number: %d\n", frame);
+  printf("Mass: %d; Centroid: (%d, %d)\n", mass, x_center, y_center);
+  printf("\033[2J");
 
   gdk_threads_enter();
-  // GdkPixbuf structure to store the displayed picture
+  // GdkPixbuf structures to store the displayed picture
   static GdkPixbuf *pixbuf = NULL;
+  static GdkPixbuf *maskbuf = NULL;
 
   if (pixbuf != NULL) {
     g_object_unref(pixbuf);
     pixbuf=NULL;
   }
 
-  // Creating the GdkPixbuf from the transmitted data
+  // Create GdkPixbuf from color frame data
   pixbuf = gdk_pixbuf_new_from_data(pixbuf_data,
   				    GDK_COLORSPACE_RGB,
   				    FALSE,    // No alpha channel
   				    8,        // 8 bits per pixel
   				    320,      // Image width
 				    240,
-  				    //288,      // Image height
+  				    320 * 3,  // new pixel every 3 bytes (3channel per pixel)
+  				    NULL,     // Function pointers
+  				    NULL);
+  // Create the GdkPixbuf from color mask display buffer
+  maskbuf = gdk_pixbuf_new_from_data(display_data,
+  				    GDK_COLORSPACE_RGB,
+  				    FALSE,    // No alpha channel
+  				    8,        // 8 bits per pixel
+  				    320,      // Image width
+				    240,
   				    320 * 3,  // new pixel every 3 bytes (3channel per pixel)
   				    NULL,     // Function pointers
   				    NULL);
   gui_t *gui = get_gui();
 
-  if (gui && gui->cam) // Displaying the image
+ // Display the image
+  if (gui && gui->cam) {
     gtk_image_set_from_pixbuf(GTK_IMAGE(gui->cam), pixbuf);
+    // also display the pixbuf in a second window
+    if (gui->mask_cam) {
+      gtk_image_set_from_pixbuf(GTK_IMAGE(gui->mask_cam), maskbuf);
+    }
+  }
   gdk_threads_leave();
   
   return (SUCCESS);

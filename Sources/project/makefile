@@ -1,4 +1,4 @@
-TESTS=test_gauss test_hsv test_ppm test_mask test_util test_filter full
+TESTS=test_gauss test_hsv test_ppm test_mask test_util test_filter full 
 
 all: $(TESTS)
 
@@ -32,6 +32,8 @@ threshold.o: threshold.c
 binfilter.o: binfilter.c
 	gcc -c -O3 binfilter.c
 
+frame.o: frame.c
+	gcc -c -O3 frame.c
 full_frame_test.o: full_frame_test.c
 	gcc -c -O3 full_frame_test.c
 filter_test.o: filter_test.c

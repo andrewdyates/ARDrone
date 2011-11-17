@@ -9,6 +9,7 @@ typedef struct gui
   GtkWidget *stop;
   GtkWidget *box;
   GtkWidget *cam;
+  GtkWidget *mask_cam;
 } gui_t;
  
 gui_t *get_gui();
