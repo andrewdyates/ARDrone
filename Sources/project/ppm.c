@@ -26,9 +26,14 @@ int read_ppm(unsigned char* buf, char* filename) {
     return -1;
   }
   // ignore first three lines
-  r = fgets(header, num_bytes, fp);
-  r = fgets(header, num_bytes, fp);
-  r = fgets(header, num_bytes, fp);
+  for (i=0; i<3; i++) {
+    r = fgets(header, num_bytes, fp);
+    if (!r) {
+      fprintf(stderr, "WARNING: could not read first line of '%s'.", filename);
+      return -1;
+    }
+  }
+
   // read bytes
   for (i=0; i<WIDTH*HEIGHT*3; i++) {
     c = fgetc(fp);
@@ -167,8 +172,13 @@ int read_ppm1(unsigned char* buf, char* filename) {
     return -1;
   }
   // ignore first two lines
-  r = fgets(header, num_bytes, fp);
-  r = fgets(header, num_bytes, fp);
+  for (i=0; i<2; i++) {
+    r = fgets(header, num_bytes, fp);
+    if (!r) {
+      fprintf(stderr, "WARNING: could not read first line of '%s'.", filename);
+      return -1;
+    }
+  }
   // read bytes
   for (i=0; i<WIDTH*HEIGHT; i++) {
     c = fgetc(fp);

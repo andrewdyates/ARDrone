@@ -4,13 +4,12 @@
 void median_filter(unsigned char* buf) {
   /* Apply 3x3 median filter to WIDTH*HEIGHT binary image mask buf */
   int x, y;
-  int ones, last_ones;
+  int ones;
   int xx, offset;
   unsigned char rowbuf[WIDTH*2];
   
   for (y=0; y<HEIGHT; y++) {
     offset = WIDTH*(y%2);
-    last_ones = 5;
     // write row from two iterations ago
     if (y>=2) {
       for (xx=0; xx<WIDTH; xx++) {

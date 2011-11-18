@@ -45,6 +45,7 @@ int fly(int x, int y, int mass, int debug) {
   
   if (debug) {
     printf("phi=%1.2f, theta=%1.2f, gaz=%1.2f, yaw=%1.2f\n", phi, theta, gaz, yaw);
+    printf("radius (from mass): %d\n", radius);
   }
   return 0;
 }
