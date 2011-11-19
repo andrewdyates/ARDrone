@@ -21,6 +21,8 @@ int fly(int x, int y, int mass, int debug) {
     }
     return 1;
   }
+  // this allows gaz movement
+  ardrone_at_reset_com_watchdog();
   
   radius = round(sqrt(mass / 3.1415));
   xoff = x-(int)xrange;
