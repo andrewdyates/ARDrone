@@ -34,7 +34,7 @@ int fly(int x, int y, int mass, int debug) {
 
   // Simple +/-1.0 view range for turns
   // do not (yet) account for current flight angle
-  gaz = yoff/yrange * 1.2; // vertical speed
+  gaz = yoff/yrange * 0.6; // vertical speed
   yaw = xoff/xrange * 1.2; // angular speed
   if (gaz > 1.0) gaz = 1.0;
   if (gaz < -1.0) gaz = -1.0;
@@ -42,7 +42,7 @@ int fly(int x, int y, int mass, int debug) {
   if (yaw < -1.0) yaw = -1.0;
   
   // first bit: 0=hover mode; 1=dynamic turns
-  ardrone_at_set_progress_cmd(0, phi, theta, gaz, yaw);
+  ardrone_at_set_progress_cmd(0, phi, theta, -gaz, yaw);
 
   
   if (debug) {
