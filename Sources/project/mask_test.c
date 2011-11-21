@@ -26,8 +26,8 @@ int main(int argc, char *argv[]) {
   // get mask
   orange_thresh(hsv_buf, mask_buf);
   // write mask
-  write_ppm1(mask_buf, "raw_mask.ppm");
-  printf("Confirm that the binary image 'raw_mask.ppm' is a masked copy of rgb image '%s'.\n", argv[1]);
+  write_ppm1(mask_buf, "testdata/raw_mask.ppm");
+  printf("Confirm that the binary image 'testadata/raw_mask.ppm' is a masked copy of rgb image '%s'.\n", argv[1]);
 
   // ==================
   // 2. Test Gaussian Blur
@@ -40,8 +40,8 @@ int main(int argc, char *argv[]) {
   // get mask
   orange_thresh(hsv_buf, mask_buf);
   // write mask
-  write_ppm1(mask_buf, "blur_mask.ppm");
-  printf("Confirm that the binary image 'blur_mask.ppm' is a masked copy of blurred rgb image '%s'.\n", argv[1]);
+  write_ppm1(mask_buf, "testdata/blur_mask.ppm");
+  printf("Confirm that the binary image 'testdata/blur_mask.ppm' is a masked copy of blurred rgb image '%s'.\n", argv[1]);
 
   // ==================
   // 3. Test Centroid (given mask computed in "2. Test Gaussian Blur"
@@ -61,8 +61,8 @@ int main(int argc, char *argv[]) {
 
   // turn off centroid (display as block dot against presumably a white background
   mask_buf[ind1(x_bar, y_bar)] = 0;
-  write_ppm1(mask_buf, "blur_mask_centroid.ppm");
-  printf("Confirm that the binary image 'blur_mask_centroid.ppm' has a black pixel at the centroid.\n");
+  write_ppm1(mask_buf, "testdata/blur_mask_centroid.ppm");
+  printf("Confirm that the binary image 'testdata/blur_mask_centroid.ppm' has a black pixel at the centroid.\n");
   
   return 0;
 }

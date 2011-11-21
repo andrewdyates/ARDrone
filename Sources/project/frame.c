@@ -5,11 +5,12 @@
 #include "threshold.h"
 #include "ppm.h"
 #include "moments.h"
+#include "facedetect.h"
 
-#define MASS 6
+#define MIN_MASS 6
 
-void process_frame(unsigned char* frame_buf, unsigned char* mask_buf, int* mass, int* x_center, int* y_center) {
-  /* Process one frame of RGB video. 
+void process_frame_face(unsigned char* frame_buf, unsigned char* mask_buf, int* mass, int* x_center, int* y_center) {
+  /* Process one frame of RGB video for face detection. 
  
   Args:
     frame_buf: WIDTH*HEIGHT*3 color video frame
@@ -18,6 +19,30 @@ void process_frame(unsigned char* frame_buf, unsigned char* mask_buf, int* mass,
     x_center: x centroid cooridinate or -1 if none
     y_center: y centroid cooridinate or -1 if none
   */
+  static int frameCount = 0;
+  
+  if (frameCount ++ % 5 == 0) {
+    int width, height;
+    DetectFace(frame_buf, x_center, y_center, &width, &height);
+    *mass = width * height;
+  } else {
+    mass = 0;
+  }
+}
+
+
+void process_frame_ball(unsigned char* frame_buf, unsigned char* mask_buf, int* mass, int* x_center, int* y_center) {
+  /* Process one frame of RGB video for orange ball detection. 
+  WARNING: This function modifies frame_buf! 
+ 
+  Args:
+    frame_buf: WIDTH*HEIGHT*3 color video frame
+    mask_buf: WIDTH*HEIGHT binary mask of rgb_buf
+    mass: number of pixels in mask
+    x_center: x centroid cooridinate or -1 if none
+    y_center: y centroid cooridinate or -1 if none
+  */
+
   unsigned char rgb_buf[WIDTH*HEIGHT*3];
   float hsv_buf[WIDTH*HEIGHT*3];
   int i;
@@ -36,10 +61,11 @@ void process_frame(unsigned char* frame_buf, unsigned char* mask_buf, int* mass,
   median_filter(mask_buf);
   // compute mass and (sufficient) centroid
   *mass = centroid(mask_buf, x_center, y_center);
-  if (*mass < MASS) {
+  if (*mass < MIN_MASS) {
     *x_center = -1;
     *y_center = -1;
   }
+
 }
 
 void display_mask(unsigned char* mask_buf, unsigned char* display_buf, int x_center, int y_center) {

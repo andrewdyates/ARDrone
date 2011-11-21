@@ -38,8 +38,8 @@ int main(int argc, char* argv[]) {
     printf("No centroid\n");
   }
   // output mask for verification
-  write_ppm1(mask_buf, "full_frame_test.ppm");
-  printf("Wrote mask to 'full_frame_test.ppm' for verification.\n");
+  write_ppm1(mask_buf, "testdata/full_frame_test.ppm");
+  printf("Wrote mask to 'testdata/full_frame_test.ppm' for verification.\n");
 
   return 0;
 }

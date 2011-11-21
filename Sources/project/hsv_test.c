@@ -14,8 +14,8 @@ int main() {
   FILE *fp;
   int i;
   
-  filename_in = "pixbuff_7.ppm";
-  filename_out = "pixbuff_7_hsv.txt";
+  filename_in = "testdata/pixbuff_7.ppm";
+  filename_out = "testdata/pixbuff_7_hsv.txt";
   read_ppm(rgb_buf, filename_in);
   rgb2hsv(rgb_buf, hsv_buf);
   // verify sample hsv values
