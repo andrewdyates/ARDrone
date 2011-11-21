@@ -75,19 +75,18 @@ C_RESULT output_gtk_stage_transform( void *cfg, vp_api_io_data_t *in, vp_api_io_
   int is_hover;
 
   frame++;
-  
-  vp_os_mutex_lock(&video_update_lock);
-  /* Get a reference to the last decoded picture */
-  pixbuf_data      = (uint8_t*)in->buffers[0];
-  vp_os_mutex_unlock(&video_update_lock);
 
-  // Process last frame
-  process_frame(pixbuf_data, mask_buf, &mass, &x_center, &y_center);
+  // Process frame for orange ball
+  process_frame_ball(pixbuf_data, mask_buf, &mass, &x_center, &y_center);
+  
+  // UNCOMMENT TO DETECT FACES
+  //process_frame_face(pixbuf_data, mask_buf, &mass, &x_center, &y_center);
+  
   // Get mask display
   display_mask(mask_buf, display_data, x_center, y_center);
-  // Fly drone
   
-  is_hover = fly(x_center, y_center, mass, 1);
+  // Fly drone
+  is_hover = fly(x_center, y_center, mass);
 
   // Print status
   printf("Frame number: %d\n", frame);

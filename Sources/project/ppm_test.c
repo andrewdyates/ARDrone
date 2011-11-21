@@ -6,8 +6,8 @@ int main() {
   char *filename_in;
   char *filename_out;
   unsigned char c1, c2, c3;
-  filename_in = "pixbuff_7.ppm";
-  filename_out = "outtest.ppm";
+  filename_in = "testdata/pixbuff_7.ppm";
+  filename_out = "testdata/outtest.ppm";
   read_ppm(buf, filename_in);
   write_ppm(buf, filename_out);
   // verify index function works as expected
