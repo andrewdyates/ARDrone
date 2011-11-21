@@ -42,7 +42,7 @@ int fly(int x, int y, int mass, int debug) {
   if (yaw < -1.0) yaw = -1.0;
   
   // first bit: 0=hover mode; 1=dynamic turns
-  ardrone_at_set_progress_cmd(0, phi, theta, -gaz, yaw);
+  ardrone_at_set_progress_cmd(1, phi, theta, -gaz, yaw);
 
   
   if (debug) {
