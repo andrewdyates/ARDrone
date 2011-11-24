@@ -8,13 +8,13 @@ CSE634_PROJECT=\
   project/threshold.c \
   project/binfilter.c \
   project/frame.c \
-  project/fly.c
+  project/fly.c \
+  project/facedetect.c
 
 
 SDK_PATH:=$(shell pwd)/../../../../ARDroneLib
 PC_TARGET=yes
 USE_LINUX=yes
-
 ifdef MYKONOS
    include $(ARDRONE_CUSTOM_CONFIG)
    include $(ARDRONE_BUILD_CONFIG)
@@ -59,10 +59,10 @@ GENERIC_BINARIES_SOURCE_ENTRYPOINTS+=			\
    ardrone_testing_tool.c
 
 GENERIC_INCLUDES:=$(addprefix -I,$(GENERIC_INCLUDES))
-#GENERIC_INCLUDES += `pkg-config --cflags opencv`
+GENERIC_INCLUDES += `pkg-config --cflags opencv`
 
 GENERIC_LIB_PATHS=-L$(GENERIC_TARGET_BINARIES_DIR)
-GENERIC_LIBS=-lpc_ardrone -lgtk-x11-2.0 -lrt #`pkg-config --libs opencv`
+GENERIC_LIBS=-lpc_ardrone -lgtk-x11-2.0 -lrt `pkg-config --libs opencv`
 
 SDK_FLAGS+="USE_APP=yes"
 SDK_FLAGS+="APP_ID=work_sdk"

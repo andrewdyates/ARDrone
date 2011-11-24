@@ -17,7 +17,6 @@ long moment(unsigned char *buf, int xp, int yp) {
   for (x=0; x<WIDTH; x++) {
     for (y=0; y<HEIGHT; y++) {
       i = ind1(x,y);
-      // this is wrong!
       sum += intpow(x, xp) * intpow(y, yp) * buf[i];
     }
   }

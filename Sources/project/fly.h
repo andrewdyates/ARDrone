@@ -1,1 +1,1 @@
-int fly(int x, int y, int mass, int debug);
+int fly(int x, int y, int mass);

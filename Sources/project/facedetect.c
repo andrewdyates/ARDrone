@@ -1,4 +1,5 @@
 #include "facedetect.h"
+#include "cv.h"
 #include "../ardrone_testing_tool.h"
 
 //int faceCount = 0;
