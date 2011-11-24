@@ -32,8 +32,7 @@ void DetectFace(unsigned char* frame_buf, int *center_x, int *center_y, int *wid
 
 	faces = cvHaarDetectObjects(frame, frontCascade, frontStorage,
 			1.1, 2, CV_HAAR_DO_CANNY_PRUNING,
-			cvSize(20, 20),
-			cvSize(0,0));
+			cvSize(20, 20));
 
 
 	if (faces->total > 0)
