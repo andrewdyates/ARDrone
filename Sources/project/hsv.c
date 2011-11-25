@@ -4,7 +4,6 @@
 #include <stdarg.h>
 #include <stdio.h>
 
-
 void rgb2hsv(unsigned char* rgb_buf, float* hsv_buf) {
   /* Convert (red, green, blue) to (hue, saturation, value).
 
@@ -60,3 +59,49 @@ void rgb2hsv(unsigned char* rgb_buf, float* hsv_buf) {
       
 }
 
+
+
+void rgb2hue(unsigned char* rgb_buf, float* hsv_buf) {
+	/* Convert (red, green, blue) to (hue).
+	 
+	 Args:
+	 rgb_buf: read from WIDTH*HEIGHT*3 rgb buffer
+	 hsv_buf: write to WIDTH*HEIGHT hue buffer
+	 rgb_buf: WIDTH*HEIGHT*3 rgb buffer
+	 */
+	register int x, y;
+	unsigned char r, g, b;
+	unsigned char max, min;
+	float chroma, hue;
+	
+	for (x=0; x<WIDTH; x++) {
+		for (y=0; y<HEIGHT; y++) {
+			r = rgb_buf[ind3(x, y, 0)];
+			g = rgb_buf[ind3(x, y, 1)];
+			b = rgb_buf[ind3(x, y, 2)];
+			max = maximum(3, r, g, b);
+			min = minimum(3, r, g, b);
+			chroma = max-min;
+			// HUE
+			if (chroma == 0) {
+				hue = 0.0;
+			} else if (max == r) {
+				hue = (g-b)/chroma;
+				if (hue < 0) {
+					hue = hue + 6;
+				}
+			} else if (max == g) {
+				hue = (b-r)/chroma + 2;
+			} else {
+				hue = (r-g)/chroma + 4;
+			}
+			// scale to fraction of 360 degrees
+			hue = hue / 6.0;
+			
+			// set pixel values in HSV buffer
+			hsv_buf[ind1(x,y)] = hue*255;
+		}
+		
+	}
+	
+}

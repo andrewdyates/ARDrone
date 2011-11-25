@@ -39,3 +39,12 @@ void median_filter(unsigned char* buf) {
     buf[ind1(xx,y-2)] = rowbuf[xx+offset];
   }
 }
+
+/* void connected_components(unsigned char* buf, struct region_s* regions) { */
+/*   unsigned char buf[WIDTH*HEIGHT] label_buf; */
+/*   int curr_label = 0; */
+  
+/*   // copy labels in to label buffer and add equiv classes to regions */
+/*   // merge equivalence classes */
+  
+/* } */
