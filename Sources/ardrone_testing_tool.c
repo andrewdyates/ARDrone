@@ -41,31 +41,27 @@ static int32_t exit_ihm_program = 1;
 
 int GetCvClassifier(CvHaarClassifierCascade **classifier)
 {
-	if(initialized == 0)
-	{
-		frontCascade = (CvHaarClassifierCascade*)cvLoad(FRONT_CASCADE_FILE, 0, 0, 0);
-		if (frontCascade != NULL && frontStorage != NULL)
-		{
-			initialized = 1;
-		}
-	}
-	*classifier = frontCascade;
-	return (frontCascade == NULL)?(1):(0);
-}
-int GetCvStorage(CvMemStorage **storage)
-{
-	if(initialized == 0)
-	{
-		frontStorage = cvCreateMemStorage(0);
-		if (frontCascade != NULL && frontStorage != NULL)
-		{
-			initialized = 1;
-		}
-	}
-	*storage = frontStorage;
-	return (frontStorage == NULL)?(1):(0);
+  if(initialized == 0) {
+    frontCascade = (CvHaarClassifierCascade*)cvLoad(FRONT_CASCADE_FILE, 0, 0, 0);
+    if (frontCascade != NULL && frontStorage != NULL) {
+      initialized = 1;
+    }
+  }
+  *classifier = frontCascade;
+  return (frontCascade == NULL)?(1):(0);
 }
 
+int GetCvStorage(CvMemStorage **storage)
+{
+  if(initialized == 0) {
+    frontStorage = cvCreateMemStorage(0);
+    if (frontCascade != NULL && frontStorage != NULL) {
+      initialized = 1;
+    }
+  }
+  *storage = frontStorage;
+  return (frontStorage == NULL)?(1):(0);
+}
 
 DEFINE_THREAD_ROUTINE(gui, data) {
   gdk_threads_enter();
@@ -78,7 +74,6 @@ DEFINE_THREAD_ROUTINE(gui, data) {
 /* The delegate object calls this method during initialization of an ARDrone application */
 C_RESULT ardrone_tool_init_custom(int argc, char **argv)
 {
-
 
   /* Register GUI */
   init_gui(argc, argv); /* Creating the GUI */
@@ -125,7 +120,7 @@ C_RESULT signal_exit()
 BEGIN_THREAD_TABLE
   THREAD_TABLE_ENTRY( gui, 20)
 // we also aren't controlling the drone in this thread
-//  THREAD_TABLE_ENTRY( ardrone_control, 20 )
+  THREAD_TABLE_ENTRY( ardrone_control, 20 )
 // we don't care about navdata right now
 //  THREAD_TABLE_ENTRY( navdata_update, 20 )
   THREAD_TABLE_ENTRY( video_stage, 20 )

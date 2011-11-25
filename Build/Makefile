@@ -9,7 +9,8 @@ CSE634_PROJECT=\
   project/binfilter.c \
   project/frame.c \
   project/fly.c \
-  project/facedetect.c
+  project/facedetect.c \
+  project/camshift.c
 
 
 SDK_PATH:=$(shell pwd)/../../../../ARDroneLib

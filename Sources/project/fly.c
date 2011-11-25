@@ -42,23 +42,26 @@ int fly(int x, int y, int mass, int mass_thresh) {
   // Never tilt.
   phi = 0.0;         // left/right angle
 
-  // 2. Forward tilt (theta)
-  // ----------------------
-  // area linearly scales with square root
-  fmass = sqrt((float)mass);
-  fmass_thresh = sqrt((float)mass_thresh);
-  theta = (mass_thresh - fmass) / mass_thresh;
-  // scale theta
-  theta *= 0.5;
-  // cap theta at maximum amplitude
-  if (theta > 1.0) theta = 1.0;
-  if (theta < -1.0) theta = -1.0;
-  // if abs(theta)is small, activate hover mode.
-  if (theta > -0.05 && theta < 0.05) {
-    move_flag = 0; // hover in place (only turn and rise/fall)
-  } else {
-    move_flag = 1; // activate motion
-  }
+  /* // 2. Forward tilt (theta) */
+  /* // ---------------------- */
+  /* // area linearly scales with square root */
+  /* fmass = sqrt((float)mass); */
+  /* fmass_thresh = sqrt((float)mass_thresh); */
+  /* theta = (mass_thresh - fmass) / mass_thresh; */
+  /* // scale theta */
+  /* theta *= 0.5; */
+  /* // cap theta at maximum amplitude */
+  /* if (theta > 1.0) theta = 1.0; */
+  /* if (theta < -1.0) theta = -1.0; */
+  /* // if abs(theta)is small, activate hover mode. */
+  /* if (theta > -0.05 && theta < 0.05) { */
+  /*   move_flag = 0; // hover in place (only turn and rise/fall) */
+  /* } else { */
+  /*   move_flag = 1; // activate motion */
+  /* } */
+  // do not move for now
+  theta = 0.0;
+  move_flag = 0;
 
   // 3. Stationary Movement (gaz (y) and yaw (x))
   // ----------------------    
@@ -70,8 +73,8 @@ int fly(int x, int y, int mass, int mass_thresh) {
   yoff = y-(int)yrange;
   // gaz and yaw +/- 1.0 scaled ratio distance from center
   // do not dampen for mass (yet)
-  gaz = yoff/yrange * 0.6; // vertical speed
-  yaw = xoff/xrange * 1.2;  // angular speed
+  gaz = yoff/yrange * 0.3; // vertical speed
+  yaw = xoff/xrange * 0.6;  // angular speed
   // correct out-of-bounds
   if (gaz > 1.0) gaz = 1.0;
   if (gaz < -1.0) gaz = -1.0;

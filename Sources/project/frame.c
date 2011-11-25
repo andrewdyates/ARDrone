@@ -9,24 +9,37 @@
 
 #define MIN_MASS 6
 
-void process_frame_face(unsigned char* frame_buf, unsigned char* mask_buf, int* mass, int* x_center, int* y_center) {
+void process_frame_face(unsigned char* frame_buf, int* mass, int* x_center, int* y_center, int* width, int* height) {
   /* Process one frame of RGB video for face detection. 
  
   Args:
     frame_buf: WIDTH*HEIGHT*3 color video frame
-    mask_buf: WIDTH*HEIGHT binary mask of rgb_buf
     mass: number of pixels in mask
     x_center: x centroid cooridinate or -1 if none
     y_center: y centroid cooridinate or -1 if none
+    width: width of face detected in pixels or -1 if none
+    height: height of face detected in pixels or -1 if none
   */
   static int frameCount = 0;
   
-  if (frameCount ++ % 5 == 0) {
-    int width, height;
-    DetectFace(frame_buf, x_center, y_center, &width, &height);
-    *mass = width * height;
+  if (frameCount ++ % 3 == 0) {
+    DetectFace(frame_buf, x_center, y_center, width, height);
+    *mass = (*width) * (*height);
   } else {
-    mass = 0;
+    *x_center = -1;
+    *y_center = -1;
+    *width = -1;
+    *height = -1;
+    *mass = 0;
+  }
+  
+}
+
+void clear_mask(unsigned char* mask_buf) {
+  /* Zero out binary mask */
+  int i;
+  for (i=0; i<WIDTH*HEIGHT; i++) {
+    mask_buf[i] = 0;
   }
 }
 

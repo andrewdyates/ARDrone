@@ -51,6 +51,9 @@
 #include <ardrone_tool/UI/ardrone_input.h>
 #include <stdio.h>
 
+#include "../project/ppm.h"
+#include "../project/camshift.h"
+#include "../project/hsv.h"
 #include "../project/frame.h"
 #include "../project/fly.h"
 
@@ -70,17 +73,64 @@ C_RESULT output_gtk_stage_transform( void *cfg, vp_api_io_data_t *in, vp_api_io_
 {
   static int frame = 0;
   int mass, x_center, y_center;
-  unsigned char mask_buf[320*240];
-  uint8_t display_data[320*240*3];
+  unsigned char mask_buf[WIDTH*HEIGHT];
+  uint8_t display_data[WIDTH*HEIGHT*3];
   int is_hover;
-
+  static int width, height;
+  static int is_face = 0;
+  int camshift_error;
+  static float this_hue_buf[WIDTH*HEIGHT];
+  static float last_hue_buf[WIDTH*HEIGHT];
+  int i;
+  static camshift_frames = 0;
+  
   frame++;
 
+  // GET FRAME FROM VIDEO FEED
+  vp_os_mutex_lock(&video_update_lock);
+  pixbuf_data      = (uint8_t*)in->buffers[0];
+  vp_os_mutex_unlock(&video_update_lock);
+
   // Process frame for orange ball
-  process_frame_ball(pixbuf_data, mask_buf, &mass, &x_center, &y_center);
+  // UNCOMMENT TO DETECT BALL
+  //process_frame_ball(pixbuf_data, mask_buf, &mass, &x_center, &y_center);
   
   // UNCOMMENT TO DETECT FACES
-  //process_frame_face(pixbuf_data, mask_buf, &mass, &x_center, &y_center);
+  if (is_face == 0) {
+    //printf("Detecting face...\n");
+    process_frame_face(pixbuf_data, &mass, &x_center, &y_center, &width, &height);
+    if (mass > 8) {
+      is_face = 1;
+      rgb2hue(pixbuf_data, last_hue_buf);
+      printf("DETECT!!! x,y = %d, %d\n", x_center, y_center);
+    }
+  } else {
+    rgb2hue(pixbuf_data, this_hue_buf);
+    camshift_error = camshift(last_hue_buf, this_hue_buf, &x_center, &y_center, width, height);
+    printf("camshift x,y = %d, %d\n", x_center, y_center);
+    
+    // copy this buffer to last buffer
+    for (i=0; i<WIDTH*HEIGHT; i++) {
+      last_hue_buf[i] = this_hue_buf[i];
+    }
+    
+    if (camshift_error) {
+      printf("CAMSHIFT ERROR\n");
+      is_face = 0;
+      x_center = -1;
+      y_center = -1;
+    }
+    camshift_frames++;
+    // about two seconds
+    if (camshift_frames > 30) {
+      printf("!!check to see if we are still tracking\n");
+      camshift_frames = 0;
+      is_face = 0;
+    }      
+  }
+  
+  // we did not use the mask, so make it all black
+  clear_mask(mask_buf);
   
   // Get mask display
   display_mask(mask_buf, display_data, x_center, y_center);

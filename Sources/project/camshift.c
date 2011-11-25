@@ -32,8 +32,10 @@ int camshift(float* im1, float* im2, int* cx, int* cy, int ww, int wh)
 	
 	//perform mean-shift
 	int progress = mshift(probim, cx, cy, ww, wh);
-	if(progress)
+	if(progress) {
 		printf("image out of bounds!");
+		return 1;
+	}
 	
 	return 0;
 }//camshift
