@@ -20,6 +20,8 @@ int camshift(float* im1, float* im2, int* cx, int* cy, int ww, int wh)
 {
 	unsigned int hist[256];
 	unsigned int probim[WIDTH*HEIGHT];
+	double m00;
+	int progress;
 	
 	if(ww % 2) ww = ww - 1;
 	if(wh % 2) wh = wh - 1;
@@ -31,10 +33,13 @@ int camshift(float* im1, float* im2, int* cx, int* cy, int ww, int wh)
 	backprojectHist(hist, im2, probim);
 	
 	//perform mean-shift
-	int progress = mshift(probim, cx, cy, ww, wh);
+	progress = mshift(probim, cx, cy, ww, wh, &m00);
+	if (m00 / (ww*wh) < 0.5) {
+	  progress = 1;
+	}
 	if(progress) {
-		printf("image out of bounds!");
-		return 1;
+	  printf("image out of bounds!");
+	  return 1;
 	}
 	
 	return 0;
@@ -70,13 +75,13 @@ void backprojectHist(unsigned int* H, float* im, unsigned int* probim)
 		}
 }//backprojectHist
 
-int mshift(unsigned int* probim, int* cx, int* cy, int ww, int wh)
+int mshift(unsigned int* probim, int* cx, int* cy, int ww, int wh, double* m00)
 {
 	int old_cx = *cx;
 	int old_cy = *cy;
-	double m00 = compute_m00(probim, old_cx, old_cy, ww, wh);
-	*cx = round(compute_m10(probim, old_cx, old_cy, ww, wh)/m00);
-	*cy = round(compute_m01(probim, old_cx, old_cy, ww, wh)/m00);
+	*m00 = compute_m00(probim, old_cx, old_cy, ww, wh);
+	*cx = round(compute_m10(probim, old_cx, old_cy, ww, wh) / *m00);
+	*cy = round(compute_m01(probim, old_cx, old_cy, ww, wh) / *m00);
 	
 	if(*cx - ww/2 < 0 || *cy - wh/2 < 0 || *cx + ww/2 > WIDTH-1 || *cy + wh/2 > HEIGHT-1)
 		return 1;
