@@ -14,3 +14,5 @@ int mshift(unsigned int* probim, int* cx, int* cy, int ww, int wh, double *m00);
 double compute_m00(unsigned int* probim, int cx, int cy, int ww, int wh);
 double compute_m10(unsigned int* probim, int cx, int cy, int ww, int wh);
 double compute_m01(unsigned int* probim, int cx, int cy, int ww, int wh);
+int findMax(unsigned int* hist);
+int findMin(unsigned int* hist);

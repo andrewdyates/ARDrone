@@ -61,6 +61,12 @@ void constructHist(unsigned int* hist, float* im, int cx, int cy, int ww, int wh
 			hist[val]++;
 		}//forj
 	}//fori
+			
+	int maxH = findMax(hist);
+	int minH = findMin(hist);
+	for(i = 0; i < 256; i++) {
+	  hist[i] = (hist[i] - minH)/(maxH - minH);
+	}
 }//constructHist
 
 void backprojectHist(unsigned int* H, float* im, unsigned int* probim)
@@ -124,3 +130,26 @@ double compute_m01(unsigned int* probim, int cx, int cy, int ww, int wh)
 	
 	return m;
 }//m01
+
+
+int findMax(unsigned int* hist) {
+  int i;
+  int m = hist[0];
+  for(i = 1; i < 256; i++) {
+    if(m < hist[i])
+      m = hist[i];
+  }
+  return m;
+}
+
+
+int findMin(unsigned int* hist) {
+  int i;
+  int m = hist[0];
+  for(i = 1; i < 256; i++) {
+    if(m > hist[i])
+      m = hist[i];
+  }
+  return m;
+}
+

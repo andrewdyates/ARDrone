@@ -22,15 +22,18 @@ void process_frame_face(unsigned char* frame_buf, int* mass, int* x_center, int*
   */
   static int frameCount = 0;
   
-  if (frameCount ++ % 3 == 0) {
+  if (frameCount ++ % 4 == 0) {
     DetectFace(frame_buf, x_center, y_center, width, height);
     *mass = (*width) * (*height);
   } else {
+    /* do nothing: use last values */
+    /*
     *x_center = -1;
     *y_center = -1;
     *width = -1;
     *height = -1;
     *mass = 0;
+    */
   }
   
 }

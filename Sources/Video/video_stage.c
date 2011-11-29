@@ -72,7 +72,7 @@ C_RESULT output_gtk_stage_open( void *cfg, vp_api_io_data_t *in, vp_api_io_data_
 C_RESULT output_gtk_stage_transform( void *cfg, vp_api_io_data_t *in, vp_api_io_data_t *out)
 {
   static int frame = 0;
-  int mass, x_center, y_center;
+  static int mass = 0, x_center = -1, y_center = -1;
   unsigned char mask_buf[WIDTH*HEIGHT];
   uint8_t display_data[WIDTH*HEIGHT*3];
   int is_hover;
@@ -83,6 +83,8 @@ C_RESULT output_gtk_stage_transform( void *cfg, vp_api_io_data_t *in, vp_api_io_
   static float last_hue_buf[WIDTH*HEIGHT];
   int i;
   static camshift_frames = 0;
+  FILE *fp;
+  char filename[50];
   
   frame++;
 
@@ -108,7 +110,7 @@ C_RESULT output_gtk_stage_transform( void *cfg, vp_api_io_data_t *in, vp_api_io_
     rgb2hue(pixbuf_data, this_hue_buf);
     camshift_error = camshift(last_hue_buf, this_hue_buf, &x_center, &y_center, width, height);
     printf("camshift x,y = %d, %d\n", x_center, y_center);
-    
+
     // copy this buffer to last buffer
     for (i=0; i<WIDTH*HEIGHT; i++) {
       last_hue_buf[i] = this_hue_buf[i];
@@ -126,11 +128,26 @@ C_RESULT output_gtk_stage_transform( void *cfg, vp_api_io_data_t *in, vp_api_io_
       printf("!!check to see if we are still tracking\n");
       camshift_frames = 0;
       is_face = 0;
-    }      
+    }
   }
   
   // we did not use the mask, so make it all black
   clear_mask(mask_buf);
+
+  // write pixbuf to file
+  sprintf(filename, "/home/a/pixbuf/pixbuf_%d.ppm", frame);
+  fp = fopen(filename, "w");
+  // write header
+  fprintf(fp, "P6\n320 240\n255\n");
+  for (i=0; i<320*240*3; i++) {
+    fprintf(fp, "%c", pixbuf_data[i]);
+  }
+  fclose(fp);
+  fp = fopen("/home/a/meanshift_log.txt", "a");
+  // write log
+  fprintf(fp, "Frame number: %d; ", frame);
+  fprintf(fp, "Mass: %d; Centroid: (%d, %d);", mass, x_center, y_center);
+  fprintf(fp, "Meanshift Width: %d; Height: %d\n", width, height);
   
   // Get mask display
   display_mask(mask_buf, display_data, x_center, y_center);
@@ -141,6 +158,7 @@ C_RESULT output_gtk_stage_transform( void *cfg, vp_api_io_data_t *in, vp_api_io_
   // Print status
   printf("Frame number: %d\n", frame);
   printf("Mass: %d; Centroid: (%d, %d)\n", mass, x_center, y_center);
+  printf("Meanshift Width: %d; Height: %d\n", width, height);
   printf("\033[2J");
 
   gdk_threads_enter();
