@@ -143,11 +143,11 @@ C_RESULT output_gtk_stage_transform( void *cfg, vp_api_io_data_t *in, vp_api_io_
     fprintf(fp, "%c", pixbuf_data[i]);
   }
   fclose(fp);
+  
   fp = fopen("/home/a/meanshift_log.txt", "a");
   // write log
-  fprintf(fp, "Frame number: %d; ", frame);
-  fprintf(fp, "Mass: %d; Centroid: (%d, %d);", mass, x_center, y_center);
-  fprintf(fp, "Meanshift Width: %d; Height: %d\n", width, height);
+  // framenum, mass, centroid_x, centroid_y, width, height
+  fprintf(fp, "%d %d %d %d %d %d\n", frame, mass, x_center, y_center, width, height);
   
   // Get mask display
   display_mask(mask_buf, display_data, x_center, y_center);
